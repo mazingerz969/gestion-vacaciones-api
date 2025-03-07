@@ -1,7 +1,7 @@
 // services/integration.service.js
 /**
  * Servicio de Integración
- * 
+ *
  * Este servicio maneja la integración con sistemas externos de la empresa,
  * incluyendo el sistema de RRHH, autenticación, y otros sistemas relevantes.
  */
@@ -20,7 +20,7 @@ const config = {
   hrSystemApi: process.env.HR_SYSTEM_API,
   authSystemApi: process.env.AUTH_SYSTEM_API,
   apiKey: process.env.INTEGRATION_API_KEY,
-  refreshInterval: parseInt(process.env.SYNC_INTERVAL_MINUTES) || 60, // minutos
+  refreshInterval: parseInt(process.env.SYNC_INTERVAL_MINUTES) || 60 // minutos
 };
 
 /**
@@ -29,18 +29,18 @@ const config = {
 async function syncUsersAndDepartments() {
   try {
     logger.info('Iniciando sincronización de usuarios y departamentos');
-    
+
     // 1. Obtener datos del sistema de RRHH
     const hrResponse = await axios.get(`${config.hrSystemApi}/employees`, {
       headers: {
-        'x-api-key': config.apiKey,
-      },
+        'x-api-key': config.apiKey
+      }
     });
 
     const deptResponse = await axios.get(`${config.hrSystemApi}/departments`, {
       headers: {
-        'x-api-key': config.apiKey,
-      },
+        'x-api-key': config.apiKey
+      }
     });
 
     // 2. Procesar departamentos
@@ -51,7 +51,7 @@ async function syncUsersAndDepartments() {
         {
           nombre: dept.name,
           descripcion: dept.description,
-          codigo_externo: dept.code,
+          codigo_externo: dept.code
         },
         { upsert: true, new: true }
       );
@@ -94,7 +94,7 @@ async function syncUsersAndDepartments() {
           rol: mapExternalRole(user.role),
           supervisor_id: supervisorId,
           activo: user.status === 'active',
-          codigo_externo: user.employee_id,
+          codigo_externo: user.employee_id
         },
         { upsert: true, new: true }
       );
@@ -113,15 +113,15 @@ async function syncUsersAndDepartments() {
 async function syncVacationEntitlements() {
   try {
     logger.info('Iniciando sincronización de asignaciones de vacaciones');
-    
+
     const currentYear = new Date().getFullYear();
-    
+
     // Obtener datos del sistema de RRHH
     const response = await axios.get(`${config.hrSystemApi}/vacation-entitlements`, {
       params: { year: currentYear },
       headers: {
-        'x-api-key': config.apiKey,
-      },
+        'x-api-key': config.apiKey
+      }
     });
 
     // Procesar asignaciones
@@ -136,9 +136,9 @@ async function syncVacationEntitlements() {
 
       // Actualizar o crear asignación
       await AsignacionVacaciones.findOneAndUpdate(
-        { 
+        {
           usuario_id: usuario._id,
-          anio: currentYear 
+          anio: currentYear
         },
         {
           usuario_id: usuario._id,
@@ -147,7 +147,7 @@ async function syncVacationEntitlements() {
           dias_base: asignacion.base_days,
           dias_antiguedad: asignacion.seniority_days,
           dias_extra: asignacion.extra_days,
-          comentario: asignacion.comments || '',
+          comentario: asignacion.comments || ''
         },
         { upsert: true, new: true }
       );
@@ -166,15 +166,15 @@ async function syncVacationEntitlements() {
 async function syncHolidays() {
   try {
     logger.info('Iniciando sincronización del calendario laboral');
-    
+
     const currentYear = new Date().getFullYear();
-    
+
     // Obtener datos del sistema de RRHH
     const response = await axios.get(`${config.hrSystemApi}/holidays`, {
       params: { year: currentYear },
       headers: {
-        'x-api-key': config.apiKey,
-      },
+        'x-api-key': config.apiKey
+      }
     });
 
     // Procesar calendario laboral
@@ -182,19 +182,19 @@ async function syncHolidays() {
     for (const cal of calendarios) {
       // Convertir fechas
       const diasFestivos = cal.holiday_dates.map(date => new Date(date));
-      
+
       // Actualizar o crear calendario
       await CalendarioLaboral.findOneAndUpdate(
-        { 
+        {
           nombre: cal.name,
-          anio: currentYear 
+          anio: currentYear
         },
         {
           nombre: cal.name,
           anio: currentYear,
           dias_festivos: diasFestivos,
           codigo_externo: cal.calendar_id,
-          descripcion: cal.description || '',
+          descripcion: cal.description || ''
         },
         { upsert: true, new: true }
       );
@@ -215,7 +215,7 @@ async function authenticateUser(email, password) {
     // Llamar al sistema de autenticación externo
     const response = await axios.post(`${config.authSystemApi}/authenticate`, {
       email,
-      password,
+      password
     });
 
     // Verificar respuesta
@@ -232,11 +232,11 @@ async function authenticateUser(email, password) {
 
       // Generar token JWT
       const token = generateJWT(usuario._id);
-      
+
       // Obtener información adicional para el usuario
       const asignacion = await AsignacionVacaciones.findOne({
         usuario_id: usuario._id,
-        anio: new Date().getFullYear(),
+        anio: new Date().getFullYear()
       });
 
       // Construir respuesta
@@ -249,20 +249,20 @@ async function authenticateUser(email, password) {
           email: usuario.email,
           rol: usuario.rol,
           departamento_id: usuario.departamento_id,
-          diasTotales: asignacion ? asignacion.dias_totales : 0,
-        },
+          diasTotales: asignacion ? asignacion.dias_totales : 0
+        }
       };
     } else {
       throw new Error('Credenciales inválidas');
     }
   } catch (error) {
     logger.error('Error de autenticación', error);
-    
+
     // Si es error del sistema de autenticación
     if (error.response && error.response.data) {
       throw new Error(error.response.data.message || 'Error de autenticación');
     }
-    
+
     throw error;
   }
 }
@@ -272,11 +272,11 @@ async function authenticateUser(email, password) {
  */
 function mapExternalRole(externalRole) {
   const roleMap = {
-    'employee': 'empleado',
-    'manager': 'manager',
-    'hr_staff': 'rrhh',
-    'admin': 'admin',
-    'director': 'manager',
+    employee: 'empleado',
+    manager: 'manager',
+    hr_staff: 'rrhh',
+    admin: 'admin',
+    director: 'manager'
   };
 
   return roleMap[externalRole.toLowerCase()] || 'empleado';
@@ -287,12 +287,12 @@ function mapExternalRole(externalRole) {
  */
 function startSyncScheduler() {
   logger.info(`Iniciando sincronización programada cada ${config.refreshInterval} minutos`);
-  
+
   // Realizar sincronización inicial
   syncAll().catch(error => {
     logger.error('Error en sincronización inicial', error);
   });
-  
+
   // Configurar sincronización periódica
   setInterval(() => {
     syncAll().catch(error => {
@@ -323,5 +323,5 @@ module.exports = {
   syncHolidays,
   authenticateUser,
   startSyncScheduler,
-  syncAll,
+  syncAll
 };

@@ -9,15 +9,16 @@ node_modules/
 .env.production.local
 
 # Logs
-logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Directorios de compilación
-/build
-/dist
+# Archivos de compilación
+build/
+dist/
+out/
 
 # Archivos de IDE
 .vscode/
@@ -25,14 +26,17 @@ yarn-error.log*
 *.swp
 *.swo
 
-# Archivos de sistema
+# Caché y archivos temporales
 .DS_Store
-Thumbs.db
-
-# Archivos de caché
-.eslintcache
 .npm
-.node_repl_history
+.eslintcache
 
-# Archivos de pruebas
-coverage/ 
+# Archivos de cobertura de pruebas
+coverage/
+
+# Archivos de dependencias
+package-lock.json
+yarn.lock
+
+# Archivos de sistema
+Thumbs.db 

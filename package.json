@@ -7,20 +7,46 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "test": "jest",
-    "lint": "eslint ."
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:models": "jest tests/models",
+    "test:controllers": "jest tests/controllers",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "logs:clean": "node scripts/limpiar-logs.js",
+    "prepare": "husky install"
   },
-  "keywords": ["vacaciones", "rrhh", "api"],
+  "keywords": [
+    "vacaciones",
+    "rrhh",
+    "api"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
-    "mongoose": "^6.0.12",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
-    "jsonwebtoken": "^8.5.1"
+    "express": "^4.17.1",
+    "express-rate-limit": "^5.5.1",
+    "helmet": "^4.6.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^6.0.12",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.14",
+    "eslint": "^8.0.1",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "husky": "^8.0.3",
     "jest": "^27.3.1",
-    "eslint": "^8.2.0"
+    "mongodb-memory-server": "^7.4.0",
+    "nodemon": "^2.0.14",
+    "supertest": "^6.1.6"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
-} 
+}
