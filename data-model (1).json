@@ -1,0 +1,96 @@
+{
+  "Entidades": {
+    "Usuario": {
+      "id": "string (UUID)",
+      "nombre": "string",
+      "apellido": "string",
+      "email": "string",
+      "departamento_id": "string (FK)",
+      "rol": "enum ['empleado', 'manager', 'rrhh', 'admin']",
+      "fecha_alta": "date",
+      "activo": "boolean",
+      "supervisor_id": "string (FK, self-reference)"
+    },
+    "Departamento": {
+      "id": "string (UUID)",
+      "nombre": "string",
+      "descripcion": "string",
+      "manager_id": "string (FK)"
+    },
+    "PoliticaVacaciones": {
+      "id": "string (UUID)",
+      "nombre": "string",
+      "dias_base": "number",
+      "dias_antiguedad": "number",
+      "dias_maximo": "number",
+      "aplica_calendario": "string (FK)",
+      "activo": "boolean"
+    },
+    "CalendarioLaboral": {
+      "id": "string (UUID)",
+      "nombre": "string",
+      "anio": "number",
+      "dias_festivos": "array<date>"
+    },
+    "AsignacionVacaciones": {
+      "id": "string (UUID)",
+      "usuario_id": "string (FK)",
+      "anio": "number",
+      "dias_totales": "number",
+      "dias_base": "number",
+      "dias_antiguedad": "number",
+      "dias_extra": "number",
+      "comentario": "string"
+    },
+    "SolicitudVacaciones": {
+      "id": "string (UUID)",
+      "usuario_id": "string (FK)",
+      "fecha_solicitud": "datetime",
+      "fecha_inicio": "date",
+      "fecha_fin": "date",
+      "dias_laborables": "number",
+      "tipo": "enum ['vacaciones', 'enfermedad', 'permiso', 'otros']",
+      "comentario": "string",
+      "estado": "enum ['pendiente', 'aprobada', 'rechazada', 'cancelada']",
+      "aprobador_id": "string (FK)",
+      "fecha_aprobacion": "datetime",
+      "comentario_respuesta": "string"
+    },
+    "HistorialCambios": {
+      "id": "string (UUID)",
+      "entidad": "string",
+      "entidad_id": "string",
+      "campo": "string",
+      "valor_anterior": "string",
+      "valor_nuevo": "string",
+      "fecha": "datetime",
+      "usuario_id": "string (FK)"
+    },
+    "Notificacion": {
+      "id": "string (UUID)",
+      "usuario_id": "string (FK)",
+      "tipo": "enum ['solicitud', 'aprobacion', 'recordatorio', 'sistema']",
+      "mensaje": "string",
+      "fecha": "datetime",
+      "leido": "boolean",
+      "referencia_id": "string"
+    },
+    "Configuracion": {
+      "id": "string (UUID)",
+      "clave": "string",
+      "valor": "string",
+      "descripcion": "string"
+    }
+  },
+  "Relaciones": {
+    "Usuario_Departamento": "Many-to-One",
+    "Usuario_Supervisor": "Many-to-One (Self)",
+    "Departamento_Manager": "One-to-One (con Usuario)",
+    "PoliticaVacaciones_Calendario": "Many-to-One",
+    "AsignacionVacaciones_Usuario": "Many-to-One",
+    "SolicitudVacaciones_Usuario": "Many-to-One",
+    "SolicitudVacaciones_Aprobador": "Many-to-One",
+    "HistorialCambios_Usuario": "Many-to-One",
+    "Notificacion_Usuario": "Many-to-One"
+  }
+}

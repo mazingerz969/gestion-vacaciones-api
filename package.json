@@ -1,0 +1,26 @@
+{
+  "name": "gestion-vacaciones-api",
+  "version": "1.0.0",
+  "description": "Sistema de Gestión de Vacaciones API",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "keywords": ["vacaciones", "rrhh", "api"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^6.0.12",
+    "dotenv": "^10.0.0",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14",
+    "jest": "^27.3.1",
+    "eslint": "^8.2.0"
+  }
+} 

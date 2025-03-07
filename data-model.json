@@ -1,0 +1,49 @@
+{
+  "Entidades": {
+    "Usuario": {
+      "id": "string (UUID)",
+      "nombre": "string",
+      "apellido": "string",
+      "email": "string",
+      "departamento_id": "string (FK)",
+      "rol": "enum ['empleado', 'manager', 'rrhh', 'admin']",
+      "fecha_alta": "date",
+      "activo": "boolean",
+      "supervisor_id": "string (FK, self-reference)"
+    },
+    "Departamento": {
+      "id": "string (UUID)",
+      "nombre": "string",
+      "descripcion": "string",
+      "manager_id": "string (FK)"
+    },
+    "PoliticaVacaciones": {
+      "id": "string (UUID)",
+      "nombre": "string",
+      "dias_base": "number",
+      "dias_antiguedad": "number",
+      "dias_maximo": "number",
+      "aplica_calendario": "string (FK)",
+      "activo": "boolean"
+    },
+    "CalendarioLaboral": {
+      "id": "string (UUID)",
+      "nombre": "string",
+      "anio": "number",
+      "dias_festivos": "array<date>"
+    },
+    "AsignacionVacaciones": {
+      "id": "string (UUID)",
+      "usuario_id": "string (FK)",
+      "anio": "number",
+      "dias_totales": "number",
+      "dias_base": "number",
+      "dias_antiguedad": "number",
+      "dias_extra": "number",
+      "comentario": "string"
+    },
+    "SolicitudVacaciones": {
+      "id": "string (UUID)",
+      "usuario_id": "string (FK)",
+      "fecha_solicitud": "datetime",
+      "fecha_inicio": "

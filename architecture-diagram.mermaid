@@ -1,0 +1,24 @@
+flowchart TD
+    subgraph "Frontend"
+        A[App Web] --> |React| B[Componentes UI]
+        C[App Móvil] --> |React Native| B
+        B --> D[Redux/Estado Global]
+    end
+
+    subgraph "Backend"
+        E[API REST] --> F[Controladores]
+        F --> G[Servicios]
+        G --> H[Modelos]
+        H --> I[(Base de Datos)]
+    end
+
+    subgraph "Integración"
+        J[Sistema de Autenticación]
+        K[Sistema RRHH Existente]
+        L[Notificaciones]
+    end
+
+    D <--> |HTTPS| E
+    E <--> J
+    G <--> K
+    F --> L
